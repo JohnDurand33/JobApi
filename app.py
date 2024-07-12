@@ -17,6 +17,10 @@ CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 # Load configuration from environment variables
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['UPLOAD_FOLDER'] = 'uploads'
+
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
 
 # Initialize the database
 from models import db  # Import db after app initialization

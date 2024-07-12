@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
-from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy import Column, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 db = SQLAlchemy()
@@ -22,7 +22,7 @@ class JobSearchCriteria(db.Model):
     skills = db.Column(db.String, nullable=False)
     location = db.Column(db.String, nullable=False)
     salary = db.Column(db.String, nullable=False)
-    job_type = db.Column(db.String, nullable=True)
+    remote = db.Column(Boolean, nullable=False, default=False)  # Add this line
     user = relationship("User", back_populates="job_search_criteria")
 
 class JobApplication(db.Model):
@@ -33,6 +33,7 @@ class JobApplication(db.Model):
     company = db.Column(db.String, nullable=True)
     location = db.Column(db.String, nullable=False)
     status = db.Column(db.String, nullable=False)
+    job_id = db.Column(db.String, nullable=False)  # Add job_id to avoid duplicates
     user = relationship("User", back_populates="job_applications")
 
 User.job_search_criteria = relationship("JobSearchCriteria", order_by=JobSearchCriteria.id, back_populates="user")
